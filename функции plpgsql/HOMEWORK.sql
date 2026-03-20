@@ -1,3 +1,4 @@
+
 /* 1. Создать функцию, которая делает бэкап таблицы customers 
 (копирует все данные в другую таблицу), предварительно стирая 
 таблицу для бэкапа, если такая уже существует 
@@ -49,13 +50,22 @@ SELECT * FROM test(1, 10)
 /*4. Создать функцию, которая возвращает самые низкую
 и высокую зарплаты среди сотрудников заданного города */
 
-CREATE FUNCTION lowest_and_highest_sellary
-(IN city varchar(64) AS $$
-BEGIN
 
+CREATE FUNCTION lowest_and_highest_salary
+(IN in_city varchar(64), OUT lowest_salary numeric, 
+OUT highest_salary numeric) AS $$
+BEGIN
+	lowest_salary := MIN(salary) FROM employees WHERE city = in_city;
+	highest_salary := MAX(salary) FROM employees WHERE city = in_city;
 END;
 $$ LANGUAGE plpgsql;
 
+
+SELECT * FROM lowest_and_highest_salary('Paris')
+
+
+ALTER TABLE employees
+ADD column salary numeric
 /*5. Создать функцию, которая корректирует зарплату 
 на заданный процент,  но не корректирует зарплату, 
 если её уровень превышает заданный уровень при 
